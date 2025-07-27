@@ -1,0 +1,10 @@
+{
+  "TableName": "traffic_violations",
+  "KeySchema": [
+    { "AttributeName": "violation_id", "KeyType": "HASH" }
+  ],
+  "AttributeDefinitions": [
+    { "AttributeName": "violation_id", "AttributeType": "S" }
+  ],
+  "BillingMode": "PAY_PER_REQUEST"
+}

@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Smart Traffic Violation Detector Infrastructure
+
+Resources:
+  UploadsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "smart-traffic-uploads-${AWS::AccountId}"
+
+  ViolationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: traffic_violations
+      AttributeDefinitions:
+        - AttributeName: violation_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: violation_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+

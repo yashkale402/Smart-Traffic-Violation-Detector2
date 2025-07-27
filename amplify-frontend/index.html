@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neural Traffic Vision – AI Traffic Violation Detector</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- (Optional) Amplify JS if you add Auth/Storage -->
+    <script src="https://unpkg.com/aws-amplify@5.0.4/dist/aws-amplify.min.js"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="particle-field" id="particles"></div>
+        <div class="neural-grid"></div>
+        <div class="floating-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="futuristic-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon"><i class="fas fa-brain"></i></div>
+                <span class="brand-text">Neural Traffic Vision</span>
+                <div class="brand-pulse"></div>
+            </div>
+            <div class="nav-status">
+                <div class="status-indicator">
+                    <div class="pulse-dot"></div>
+                    <span>AI System Active</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <!-- Hero -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line">Advanced Traffic</span>
+                    <span class="title-line highlight">Violation Detection</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Powered by cutting‑edge AI and computer‑vision technology
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">99.8%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value">&lt; 2 s</div>
+                        <div class="stat-label">Analysis Time</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value">24 / 7</div>
+                        <div class="stat-label">Monitoring</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload -->
+        <section class="upload-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-upload"></i> Upload CCTV Frame</h2>
+                <p class="section-subtitle">Drop your traffic footage for instant AI analysis</p>
+            </div>
+
+            <div class="upload-container">
+                <div class="upload-box glass-morphism" id="uploadBox">
+                    <input type="file" id="fileInput" accept="image/*" hidden />
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div class="icon-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="upload-text">
+                            <h3>Drop files here or click to browse</h3>
+                            <p>Supports JPG, PNG, WebP • max 10 MB</p>
+                        </div>
+                        <button class="cyber-button primary" id="browseBtn">
+                            <span class="button-text">Select Image</span>
+                            <div class="button-glow"></div>
+                        </button>
+                    </div>
+                    <div class="upload-overlay"></div>
+                    <div class="drag-indicator">
+                        <div class="drag-icon"><i class="fas fa-download"></i></div>
+                        <span>Release to upload</span>
+                    </div>
+                </div>
+
+                <!-- Progress -->
+                <div class="progress-container d-none" id="uploadProgressWrapper">
+                    <div class="progress-header">
+                        <span class="progress-label">Processing…</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
+                    </div>
+                    <div class="cyber-progress">
+                        <div class="progress-track">
+                            <div class="progress-fill" id="uploadProgress"></div>
+                            <div class="progress-glow"></div>
+                        </div>
+                    </div>
+                    <div class="processing-status" id="processingStatus">
+                        <i class="fas fa-brain"></i>
+                        <span>Initializing neural networks…</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section class="results-section d-none" id="resultSection">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> Analysis Results</h2>
+            </div>
+
+            <div class="result-alert" id="resultAlert"></div>
+
+            <div class="results-grid">
+                <!-- Detection Summary -->
+                <div class="result-card glass-morphism">
+                    <div class="card-header"><i class="fas fa-eye"></i> Detection Summary</div>
+                    <div class="detection-table">
+                        <table id="resultTable">
+                            <thead>
+                                <tr><th>Detection Type</th><th>Value</th><th>Confidence</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Evidence -->
+                <div class="result-card glass-morphism">
+                    <div class="card-header"><i class="fas fa-image"></i> Evidence Analysis</div>
+                    <div class="evidence-container">
+                        <div class="image-wrapper">
+                            <img id="evidenceImg" alt="Evidence Analysis" />
+                            <div class="image-overlay">
+                                <div class="scan-line"></div>
+                                <div class="analysis-points"></div>
+                            </div>
+                        </div>
+                        <div class="image-controls">
+                            <button class="control-btn" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+                            <button class="control-btn" title="Download"><i class="fas fa-download"></i></button>
+                            <button class="control-btn" title="Full Screen"><i class="fas fa-expand"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="cyber-button secondary" id="newAnalysisBtn"><span class="button-text">New Analysis</span></button>
+                <button class="cyber-button primary"   id="exportBtn"><span class="button-text">Export Report</span></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="futuristic-footer">
+        <div class="footer-content">
+            <div class="footer-brand"><i class="fas fa-shield-alt"></i><span>Neural Traffic Vision</span></div>
+            <div class="footer-text">© 2025 Advanced Traffic Solutions – Powered by AI</div>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-cog"></i></a>
+                <a href="#"><i class="fas fa-question-circle"></i></a>
+                <a href="#"><i class="fas fa-chart-bar"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
